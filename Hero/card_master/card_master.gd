@@ -44,9 +44,14 @@ func limit_velocity():
 		return
 	
 	var current_vel = rb.linear_velocity
-	# 如果有速度，保持方向，强制设置为初始速度大小
-	if current_vel.length() > 0:
+	var current_speed = current_vel.length()
+	
+	if current_speed > 0:
 		rb.linear_velocity = current_vel.normalized() * max_speed
+	else:
+		var random_radian = randf_range(0, PI * 2)
+		var random_dir = Vector2.from_angle(random_radian)
+		rb.linear_velocity = random_dir * max_speed
 func spawn_cards():
 	clear_cards()
 	var deck = all_cards.duplicate()

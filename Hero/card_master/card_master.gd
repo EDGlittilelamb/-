@@ -6,7 +6,6 @@ const CARD_SPACING = 70
 const CARD_COUNT = 5
 const SPAWN_INTERVAL = 3.0
 const CARD_DOWN_OFFSET = 80
-
 var max_speed: float
 var spawn_timer = 0.0
 var all_cards := []

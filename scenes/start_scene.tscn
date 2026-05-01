@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://bumnnuovai8n0"]
+
+[ext_resource type="Script" uid="uid://gm3sb7klyw1u" path="res://scenes/start_scene.gd" id="1_cokmr"]
+
+[node name="startScene" type="Node2D"]
+script = ExtResource("1_cokmr")
+
+[node name="Quit" type="Button" parent="."]
+offset_left = 500.0
+offset_top = 400.0
+offset_right = 700.0
+offset_bottom = 480.0
+text = "Quit"
+
+[node name="Start" type="Button" parent="."]
+offset_left = 500.0
+offset_top = 280.0
+offset_right = 700.0
+offset_bottom = 360.0
+text = "Start"

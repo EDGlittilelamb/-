@@ -1,0 +1,98 @@
+[gd_scene load_steps=9 format=3 uid="uid://d3lux7pw8waak"]
+
+[ext_resource type="Script" uid="uid://p8dl5h4hr5te" path="res://scenes/main.gd" id="1_0wfyh"]
+[ext_resource type="PackedScene" path="res://Hero/boxer/boxer.tscn" id="2_sugp2"]
+[ext_resource type="Script" uid="uid://doyao316a1h8f" path="res://scenes/canvas_layer.gd" id="3_sugp2"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0wfyh"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0wfyh"]
+size = Vector2(600, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sugp2"]
+size = Vector2(20, 600)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jyhfs"]
+size = Vector2(600, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tbgi4"]
+size = Vector2(20, 600)
+
+[node name="main" type="Node2D" node_paths=PackedStringArray("field")]
+script = ExtResource("1_0wfyh")
+player_scene = ExtResource("2_sugp2")
+field = NodePath("Field")
+
+[node name="Field" type="StaticBody2D" parent="."]
+position = Vector2(604, 328)
+collision_mask = 2
+physics_material_override = SubResource("PhysicsMaterial_0wfyh")
+
+[node name="ColorRect" type="ColorRect" parent="Field"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.4045111, 0.40451115, 0.4045111, 1)
+
+[node name="top" type="CollisionShape2D" parent="Field"]
+position = Vector2(0, -300)
+shape = SubResource("RectangleShape2D_0wfyh")
+metadata/_edit_lock_ = true
+
+[node name="left" type="CollisionShape2D" parent="Field"]
+position = Vector2(-300, 0)
+shape = SubResource("RectangleShape2D_sugp2")
+metadata/_edit_lock_ = true
+
+[node name="down" type="CollisionShape2D" parent="Field"]
+position = Vector2(0, 300)
+shape = SubResource("RectangleShape2D_jyhfs")
+metadata/_edit_lock_ = true
+
+[node name="right" type="CollisionShape2D" parent="Field"]
+position = Vector2(300, 0)
+shape = SubResource("RectangleShape2D_tbgi4")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 10
+script = ExtResource("3_sugp2")
+
+[node name="PauseUI" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BG" type="ColorRect" parent="CanvasLayer/PauseUI"]
+layout_mode = 0
+offset_right = 1156.0
+offset_bottom = 645.0
+color = Color(1, 1, 1, 0)
+
+[node name="btn_resume" type="Button" parent="CanvasLayer/PauseUI"]
+layout_mode = 0
+offset_left = 525.0
+offset_top = 280.0
+offset_right = 725.0
+offset_bottom = 350.0
+text = "continue"
+
+[node name="btn_menu" type="Button" parent="CanvasLayer/PauseUI"]
+layout_mode = 0
+offset_left = 525.0
+offset_top = 400.0
+offset_right = 725.0
+offset_bottom = 460.0
+text = "back"

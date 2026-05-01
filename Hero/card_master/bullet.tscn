@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://1684yhek5f1w"]
+
+[ext_resource type="Texture2D" uid="uid://bqujqyvgvg3tj" path="res://Hero/card_master/img/UNO-Blue-Plus2.png" id="1_716wp"]
+[ext_resource type="Script" uid="uid://dyij3sq5i8nky" path="res://Hero/card_master/bullet.gd" id="1_g0ucx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g0ucx"]
+size = Vector2(23, 26)
+
+[node name="Bullet" type="Area2D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_g0ucx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_g0ucx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_716wp")

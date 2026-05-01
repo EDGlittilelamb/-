@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" uid="uid://b8cw5absxiq0i" path="res://scenes/hero.tscn" id="1_base_hero"]
+[ext_resource type="Script" path="res://Hero/boxer/boxer.gd" id="2_boxer_script"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_attack_range"]
+radius = 120.0
+
+[node name="Boxer" instance=ExtResource("1_base_hero")]
+position = Vector2(495, 264)
+script = ExtResource("2_boxer_script")
+life = 1000
+attack = 50
+attackInterval = 1.5
+
+[node name="AttackArea" type="Area2D" parent="." index="1"]
+collision_layer = 0
+collision_mask = 2
+monitoring = true
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+shape = SubResource("CircleShape2D_attack_range")

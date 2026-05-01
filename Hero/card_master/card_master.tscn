@@ -1,0 +1,22 @@
+[gd_scene load_steps=7 format=3 uid="uid://eihrkdhb0va0"]
+
+[ext_resource type="PackedScene" uid="uid://b8cw5absxiq0i" path="res://scenes/hero.tscn" id="1_h2vx2"]
+[ext_resource type="Script" uid="uid://unbqumyjf6hr" path="res://Hero/card_master/card_master.gd" id="2_po5vd"]
+[ext_resource type="PackedScene" uid="uid://bi7yevjnbufcf" path="res://Hero/card_master/card.tscn" id="3_po5vd"]
+[ext_resource type="Script" uid="uid://c50vd2yhlfgdj" path="res://Hero/card_master/bullet_handler.gd" id="4_kv3un"]
+[ext_resource type="Texture2D" uid="uid://cvcfmht2csm30" path="res://Hero/card_master/img/pokerMaster.jpg" id="4_r1ll2"]
+[ext_resource type="PackedScene" uid="uid://1684yhek5f1w" path="res://Hero/card_master/bullet.tscn" id="5_r1ll2"]
+
+[node name="CardMaster" instance=ExtResource("1_h2vx2")]
+position = Vector2(495, 264)
+script = ExtResource("2_po5vd")
+card_scene = ExtResource("3_po5vd")
+
+[node name="Sprite2D" parent="RigidBody2D" index="0"]
+position = Vector2(-1, 0)
+scale = Vector2(0.23333333, 0.36)
+texture = ExtResource("4_r1ll2")
+
+[node name="BulletHandler" type="Node2D" parent="." index="1"]
+script = ExtResource("4_kv3un")
+bullet_scene = ExtResource("5_r1ll2")

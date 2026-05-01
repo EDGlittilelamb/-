@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://bi7yevjnbufcf"]
+
+[ext_resource type="Texture2D" uid="uid://byc8qqmqrnmhv" path="res://Hero/card_master/img/2_of_clubs.png" id="1_160wh"]
+[ext_resource type="Script" uid="uid://dkpcmlgb245ke" path="res://Hero/card_master/card.gd" id="2_epyn3"]
+
+[node name="Card" type="Sprite2D"]
+texture = ExtResource("1_160wh")
+script = ExtResource("2_epyn3")

@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://b8cw5absxiq0i"]
+
+[ext_resource type="Script" uid="uid://cxj5me22yjljx" path="res://scenes/hero.gd" id="1_06baw"]
+[ext_resource type="Script" uid="uid://b16mvtcbhlawm" path="res://scenes/rigid_body_2d.gd" id="1_yvbpl"]
+[ext_resource type="Texture2D" uid="uid://bf7we40xr532m" path="res://icon.svg" id="2_yvbpl"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_yvbpl"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3uyx6"]
+radius = 60.0
+
+[node name="Hero" type="Node2D"]
+script = ExtResource("1_06baw")
+life = 1000
+attackInterval = 5.0
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+collision_layer = 2
+collision_mask = 3
+physics_material_override = SubResource("PhysicsMaterial_yvbpl")
+gravity_scale = 0.0
+lock_rotation = true
+freeze = true
+script = ExtResource("1_yvbpl")
+
+[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
+texture = ExtResource("2_yvbpl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+shape = SubResource("CircleShape2D_3uyx6")

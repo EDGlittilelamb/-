@@ -6,7 +6,6 @@ const CARD_SPACING = 70
 const CARD_COUNT = 5
 const SPAWN_INTERVAL = 3.0
 const CARD_DOWN_OFFSET = 80
-
 var max_speed: float
 var spawn_timer = 0.0
 var all_cards := []
@@ -27,6 +26,7 @@ func unlock_player_movement():
 	rb.freeze = false  # 解除冻结
 	is_ready = true    # 标记系统就绪
 func _physics_process(delta):
+	update_knockback(delta)
 	spawn_timer += delta
 	if spawn_timer >= SPAWN_INTERVAL:
 		spawn_timer = 0.0
@@ -40,6 +40,9 @@ func _fire_bullet():
 	if bullet_handler && enemy:
 		bullet_handler.fire(attack, self, enemy)
 func limit_velocity():
+	if is_knocked_back:
+		return
+	
 	var current_vel = rb.linear_velocity
 	# 如果有速度，保持方向，强制设置为初始速度大小
 	if current_vel.length() > 0:

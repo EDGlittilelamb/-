@@ -2,19 +2,45 @@ extends Hero
 
 @onready var rb: RigidBody2D = $RigidBody2D
 @onready var attack_area: Area2D = $AttackArea
+@onready var attack_range_indicator: Line2D = $AttackRangeIndicator
 
 const ATTACK_RANGE: float = 120.0
 const KNOCKBACK_FORCE: float = 400.0
 const BOUNDARY_DAMAGE_MULTIPLIER: float = 0.5
+const ATTACK_INDICATOR_DURATION: float = 0.3
+const INDICATOR_SEGMENTS: int = 32
 
 var attack_timer: float = 0.0
 var is_ready: bool = false
 var enemies_in_range: Array[Hero] = []
 var knockback_targets: Dictionary = {}
+var attack_indicator_timer: float = 0.0
+var show_attack_indicator: bool = false
 
 func _ready():
 	attack_area.body_entered.connect(_on_enemy_enter_range)
 	attack_area.body_exited.connect(_on_enemy_exit_range)
+	_init_attack_indicator()
+	if attack_range_indicator:
+		attack_range_indicator.visible = false
+
+func _init_attack_indicator():
+	if not attack_range_indicator:
+		return
+	
+	var points: PackedVector2Array = PackedVector2Array()
+	for i in range(INDICATOR_SEGMENTS + 1):
+		var angle: float = (float(i) / INDICATOR_SEGMENTS) * TAU
+		var point: Vector2 = Vector2(
+			cos(angle) * ATTACK_RANGE,
+			sin(angle) * ATTACK_RANGE
+		)
+		points.append(point)
+	
+	attack_range_indicator.points = points
+	attack_range_indicator.closed = true
+	attack_range_indicator.width = 4.0
+	attack_range_indicator.default_color = Color(1, 0.5, 0, 0.8)
 
 func unlock_player_movement():
 	rb.freeze = false
@@ -24,6 +50,9 @@ func _physics_process(delta):
 	if not is_ready:
 		return
 	
+	update_knockback(delta)
+	_update_attack_indicator(delta)
+	
 	attack_timer += delta
 	if attack_timer >= attackInterval and enemies_in_range.size() > 0:
 		attack_timer = 0.0
@@ -31,7 +60,27 @@ func _physics_process(delta):
 	
 	_process_knockback(delta)
 
+func _update_attack_indicator(delta):
+	if not attack_range_indicator:
+		return
+	
+	if show_attack_indicator:
+		attack_indicator_timer -= delta
+		if attack_indicator_timer <= 0:
+			show_attack_indicator = false
+			attack_range_indicator.visible = false
+
+func _show_attack_indicator():
+	if not attack_range_indicator:
+		return
+	
+	show_attack_indicator = true
+	attack_indicator_timer = ATTACK_INDICATOR_DURATION
+	attack_range_indicator.visible = true
+
 func _attack():
+	_show_attack_indicator()
+	
 	for enemy in enemies_in_range:
 		if enemy.is_alive and enemy != self:
 			var enemy_rb: RigidBody2D = _get_enemy_rb(enemy)
@@ -52,6 +101,8 @@ func _attack():
 			}
 			knockback_targets[enemy] = knockback_info
 			
+			enemy.start_knockback(0.5)
+			
 			enemy_rb.apply_central_impulse(direction * KNOCKBACK_FORCE)
 
 func _process_knockback(delta):
@@ -64,14 +115,12 @@ func _process_knockback(delta):
 			targets_to_remove.append(enemy)
 			continue
 		
-		var enemy_rb: RigidBody2D = _get_enemy_rb(enemy)
-		if not enemy_rb:
+		if not enemy.is_knocked_back:
 			targets_to_remove.append(enemy)
 			continue
 		
-		var current_speed: float = enemy_rb.linear_velocity.length()
-		
-		if current_speed < 50.0:
+		var enemy_rb: RigidBody2D = _get_enemy_rb(enemy)
+		if not enemy_rb:
 			targets_to_remove.append(enemy)
 			continue
 		

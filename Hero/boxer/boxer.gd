@@ -16,8 +16,10 @@ var enemies_in_range: Array[Hero] = []
 var knockback_targets: Dictionary = {}
 var attack_indicator_timer: float = 0.0
 var show_attack_indicator: bool = false
+var max_speed: float
 
 func _ready():
+	max_speed = rb.linear_velocity.length()
 	attack_area.body_entered.connect(_on_enemy_enter_range)
 	attack_area.body_exited.connect(_on_enemy_exit_range)
 	_init_attack_indicator()
@@ -51,6 +53,7 @@ func _physics_process(delta):
 		return
 	
 	update_knockback(delta)
+	_update_attack_position()
 	_update_attack_indicator(delta)
 	
 	attack_timer += delta
@@ -59,6 +62,13 @@ func _physics_process(delta):
 		_attack()
 	
 	_process_knockback(delta)
+	_limit_velocity()
+
+func _update_attack_position():
+	if attack_area:
+		attack_area.global_position = rb.global_position
+	if attack_range_indicator:
+		attack_range_indicator.global_position = rb.global_position
 
 func _update_attack_indicator(delta):
 	if not attack_range_indicator:
@@ -69,6 +79,20 @@ func _update_attack_indicator(delta):
 		if attack_indicator_timer <= 0:
 			show_attack_indicator = false
 			attack_range_indicator.visible = false
+
+func _limit_velocity():
+	if is_knocked_back:
+		return
+	
+	var current_vel = rb.linear_velocity
+	var current_speed = current_vel.length()
+	
+	if current_speed > 0:
+		rb.linear_velocity = current_vel.normalized() * max_speed
+	else:
+		var random_radian = randf_range(0, PI * 2)
+		var random_dir = Vector2.from_angle(random_radian)
+		rb.linear_velocity = random_dir * max_speed
 
 func _show_attack_indicator():
 	if not attack_range_indicator:

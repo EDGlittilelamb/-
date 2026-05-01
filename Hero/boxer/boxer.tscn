@@ -21,3 +21,8 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
 shape = SubResource("CircleShape2D_attack_range")
+
+[node name="AttackRangeIndicator" type="Line2D" parent="." index="2"]
+visible = false
+default_color = Color(1, 0.5, 0, 0.8)
+width = 4.0
